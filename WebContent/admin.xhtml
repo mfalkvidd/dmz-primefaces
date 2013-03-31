@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="template.xhtml">
+	<ui:define name="title">Admin</ui:define>
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl id="messages" showDetail="true" />
+		</h:form>
+		<p:panel style="width:900px" header="Redigera beskrivning"
+			toggleable="true">
+			<h:form id="editorForm">
+				<p:autoComplete id="nummerDropdown"
+					value="#{datormagazinBean.aktivtNummer}"
+					completeMethod="#{datormagazinBean.completeNummer}" dropdown="true"
+					var="aktivtNummer" itemLabel="#{aktivtNummer.namn}"
+					itemValue="#{aktivtNummer}" converter="#{NummerConverter}"
+					forceSelection="true">
+					<p:ajax event="itemSelect" update="editor" />
+				</p:autoComplete>
+				<p:editor id="editor"
+					value="#{datormagazinBean.aktivtNummer.beskrivning}" width="600" />
+				<h:panelGrid columns="2" style="margin-top:10px">
+					<p:commandButton id="submitButton" value="Spara" update="display"
+						oncomplete="dlg.show()" icon="ui-icon-disk" />
+				</h:panelGrid>
+				<p:dialog header="Sparat" widgetVar="dlg" showEffect="fade"
+					hideEffect="fade" modal="true">
+					<h:outputText id="display"
+						value="#{datormagazinBean.aktivtNummer.namn}" />
+				</p:dialog>
+			</h:form>
+		</p:panel>
+		<p:panel style="width:900px" header="Redigera nummer"
+			toggleable="true">
+			<h:form>
+				<p:dataTable var="nummer" value="#{datormagazinBean.nummer}"
+					id="nummer" editable="true" style="width:850px">
+					<p:ajax event="rowEdit" listener="#{datormagazinBean.onEdit}"
+						update=":form:messages" />
+					<p:ajax event="rowEditCancel"
+						listener="#{datormagazinBean.onCancel}" update=":form:messages" />
+					<p:column headerText="Namn">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{nummer.namn}" style="width:100%"/>
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{nummer.namn}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="Bild-URL">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{nummer.bildUrl}" style="width:100%"/>
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{nummer.bildUrl}" style="width:100%"/>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column>
+						<p:rowEditor />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

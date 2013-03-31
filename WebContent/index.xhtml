@@ -8,12 +8,16 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="template.xhtml">
-	<ui:define name="title">Knurra</ui:define>
+	<ui:define name="title">Datormagazin</ui:define>
 	<ui:define name="content">
-		<p:editor />
-	</ui:define>
-	<ui:define name="footer">
-	    (C) Copyright 2013 Knurra!
+		<p:accordionPanel value="#{datormagazinBean.nummer}" var="nummer">
+			<p:tab title="Datormagazin #{nummer.namn}">
+				<h:panelGrid columns="2" cellpadding="10">
+					<p:graphicImage value="#{nummer.bildUrl}" />
+					<h:outputText escape="false" value="#{nummer.beskrivning}" />
+				</h:panelGrid>
+			</p:tab>
+		</p:accordionPanel>
 	</ui:define>
 </ui:composition>
 </html>
